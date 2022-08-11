@@ -7,9 +7,9 @@ node('aws') {
         checkout scm
     }
     
-    stage('unit tests') {
-        sh "docker build -t ${imageName}-test -f Dockerfile.test ."
+    stage('Unit test'){
+        def imageTest= docker.build("${imageName}-test", "-f Dockerfile.test .")
         sh "docker run --rm -v $PWD/reports:/app/reports ${imageName}-test"
-        sh "junit /var/lib/jenkins/reports/*.xml"
+        junit "$PWD/reports/*.xml"
     }
 }
